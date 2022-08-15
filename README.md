@@ -1,2 +1,2 @@
-# gomoku_ai
-gomoku_ai
+# Renju_ai
+Renju_ai
