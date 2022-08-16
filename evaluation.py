@@ -1,5 +1,4 @@
 import numpy as np
-
 from config import params
 
 def eval_one_line(line, player:str)->(int, dict):
@@ -130,38 +129,6 @@ def eval_one_line(line, player:str)->(int, dict):
     for idx, num in enumerate(len_num_list):
         total_score += num*(alpha**idx)
     return total_score, dict_for_legal_action_check
-
-def evaluate(board, player: str):
-    #evaluate heuristic score of the board given player(0 == empty, 1 == black stone, 2 == white stone)
-    #one searches 'threats' like open two, open three, and so on..
-    size = params['board_size']
-
-    #search board horizontally
-    total_score = 0
-    for one_line in board:
-        total_score += eval_one_line(one_line, player)[0]
-
-    #search board vertically
-    for one_line in np.transpose(board):
-        total_score += eval_one_line(one_line, player)[0]
-
-    #search board diagonally1 (upper left direction), don't need to compute on corner.(triangular part)
-    for i in range(-size+6, size-5):
-        idx = -size//2 + i
-        one_line = np.diag(board, idx)
-        total_score += eval_one_line(one_line, player)[0]
-
-    #search board diagonally2 (upper right direction), don't need to compute on corner.(triangular part)
-    board_flipped = np.fliplr(board)
-    for i in range(-size+6, size-5):
-        idx = -size // 2 + i
-        one_line = np.diag(board_flipped, idx)
-        total_score += eval_one_line(one_line, player)[0]
-
-    return total_score
-
-
-
 
 
     """
