@@ -42,7 +42,7 @@ def renju(game_mode, player):
                 row, col = search_agent.get_action(gs)
                 gs.cursor_y, gs.cursor_x = row, col
         elif game_mode == 1:
-            print("A.I. is now thinking next action....")
+            print("A.I. is now thinking for next action....")
             row, col = search_agent.get_action(gs)
             gs.cursor_y, gs.cursor_x = row, col
         player_idx = player_idx + (2 if game_mode == 3 else 1)

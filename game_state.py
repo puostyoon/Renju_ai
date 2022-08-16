@@ -1,4 +1,5 @@
 #game state class
+from multiprocessing import Process, Queue
 import numpy as np
 import copy
 from config import params
@@ -127,5 +128,4 @@ class GameState:
             self.black_score = value
             self.white_score = adv_value
         return value
-
 

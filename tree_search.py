@@ -7,8 +7,7 @@ class TreeSearch:
     def __init__(self, gs: game_state.GameState, depth=params['tree_search_depth']):
         self.gs = gs
         self.depth = depth
-        self.min_score_action = dict() # for memoization
-        self.max_score_action = dict() # for memoization
+        self.eval_dict = dict()
 
     def get_action(self, gs):
         #get minmax action based on tree search
@@ -18,7 +17,12 @@ class TreeSearch:
             cur_level = current level of tree searching, starts from 1.
             """
             if cur_level == depth*2+1 or gs.is_white_win or gs.is_black_win:
-                return [gs.evaluate()]
+                key = (tuple(gs.board.flatten()), gs.player)
+                if key in self.eval_dict:
+                    return self.eval_dict[key]
+                else:
+                    self.eval_dict[key] = [gs.evaluate()]
+                    return [gs.evaluate()]
             elif (cur_level-1)%2 == 0:
                 #min node
                 return min_value(gs, cur_level, alpha, beta)
@@ -30,9 +34,6 @@ class TreeSearch:
             """ return (value, action) tuple. score is maximum score among scores of successors
             and action is the action that results in the max score.
             """
-            if (tuple(gs.board.flatten()), gs.player) in self.max_score_action:
-                print("memoization!!!!")
-                return self.max_score_action[(tuple(gs.board.flatten()), gs.player)]
             best_score = -float("inf")
             legal_moves = utils.return_legal_actions(gs)
             for action in legal_moves:
@@ -44,13 +45,9 @@ class TreeSearch:
                     best_score = successor_score
                     best_action = action
                     alpha = successor_score if successor_score>alpha else alpha
-            self.max_score_action[(tuple(gs.board.flatten()), gs.player)] = (best_score, best_action)
             return (best_score, best_action)
 
         def min_value(gs: GameState, cur_level, alpha, beta):
-            if (tuple(gs.board.flatten()), gs.player) in self.min_score_action:
-                print("memoization!!!!")
-                return self.min_score_action[(tuple(gs.board.flatten()), gs.player)]
             worst_score = float("inf")
             legal_moves = utils.return_legal_actions(gs)
             for action in legal_moves:
@@ -62,7 +59,6 @@ class TreeSearch:
                     worst_score=succeesor_score
                     worst_action = action
                     beta = succeesor_score if succeesor_score<beta else beta
-            self.min_score_action[(tuple(gs.board.flatten()), gs.player)] = (worst_score, worst_action)
             return (worst_score, worst_action)
         score, action = value(gs, 1, -float("inf"), float("inf"))
         return action

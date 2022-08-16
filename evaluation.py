@@ -1,3 +1,4 @@
+from multiprocessing import Process, Queue
 import numpy as np
 from config import params
 
@@ -129,6 +130,14 @@ def eval_one_line(line, player:str)->(int, dict):
     for idx, num in enumerate(len_num_list):
         total_score += num*(alpha**idx)
     return total_score, dict_for_legal_action_check
+
+
+# not used yet in the code.
+def work_eval_one_line(id:int, line:np.array, player:str, result: Queue):
+    total_score, dict_for_legal_action_check = eval_one_line(line, player)
+    result.put((total_score, dict_for_legal_action_check))
+    return
+
 
 
     """
